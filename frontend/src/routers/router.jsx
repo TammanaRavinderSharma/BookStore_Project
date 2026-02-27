@@ -16,6 +16,7 @@ import Dashboard from "../pages/dashboard/Dashboard.jsx";
 import ManageBooks from './../pages/dashboard/manageBooks/ManageBook';
 import AddBook from "../pages/dashboard/addBook/AddBook.jsx";
 import  UpdateBook  from "../pages/dashboard/EditBook/UpdateBook.jsx";
+import AIChat from "../pages/ai/AIChat.jsx";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
                 path: "/Register",
                 element: <Register/>
 
+            },
+             {
+                path: "/ai",
+                element: <AIChat />,
             },
             {
                 path: "/cart",
