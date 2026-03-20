@@ -1,0 +1,69 @@
+# ======================
+# Node modules (Frontend/Backend)
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ======================
+# Build folders
+# ======================
+dist/
+build/
+.next/
+out/
+
+# ======================
+# Environment variables
+# ======================
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# ======================
+# Logs
+# ======================
+logs/
+*.log
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# IDE files
+# ======================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ======================
+# Java / Spring Boot (if backend is Java)
+# ======================
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ======================
+# Database files
+# ======================
+*.sqlite
+*.db
+
+# ======================
+# Coverage
+# ======================
+coverage/
+
+# ======================
+# Misc
+# ======================
+*.lock
