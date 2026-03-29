@@ -67,3 +67,6 @@ coverage/
 # Misc
 # ======================
 *.lock
+
+.env
+Backend/.env
