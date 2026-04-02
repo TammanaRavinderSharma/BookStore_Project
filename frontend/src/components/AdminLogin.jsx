@@ -4,7 +4,7 @@ import { useState } from 'react'
 import bgVideo from '../assets/bg-video.mp4';
 
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import getBaseUrl from './../utils/baseURL';
 const AdminLogin = () => {
@@ -86,7 +86,8 @@ const AdminLogin = () => {
             <button className='bg-blue-500 hover:bg-blue-700 text-white w-full font-bold py-2 px-6 rounded-xl focus:outline-black  '>Login</button>
         </div>
     </form>
-
+    
+    <p className='mt-4 text-center text-white text-sm '>Not an Admin? <Link to="/Login" className='text-blue-500 hover:text-blue-600'>Login as User</Link></p>
        <p className='mt-5 text-center text-gray-500 text-xs '>©2026 BookStore . All rights reserved</p>
   </div>
   </div>

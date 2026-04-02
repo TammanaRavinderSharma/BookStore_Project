@@ -90,6 +90,7 @@ const Login = () => {
         Sign in with Google
         </button>
        </div>
+       <p className='mt-4 text-center text-white text-sm '>Are you an Admin? <Link to="/admin" className='text-blue-500 hover:text-blue-600'>Login here</Link></p>
        <p className='mt-5 text-center text-gray-500 text-xs '>©2026 BookStore . All rights reserved</p>
   </div>
   </div>
