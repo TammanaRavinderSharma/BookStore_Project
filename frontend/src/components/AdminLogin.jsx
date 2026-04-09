@@ -17,7 +17,7 @@ const AdminLogin = () => {
     } = useForm()
     const navigate = useNavigate()
     const onSubmit = async (data) => {
-      console.log(data)
+      //console.log(data)
     try{
       const response = await axios.post(`${getBaseUrl()}/api/auth/admin`,data , {
         headers: {
@@ -38,7 +38,7 @@ const AdminLogin = () => {
       navigate("/dashboard")
 
     }catch(error){
-      setMessage("Please provide valid email and password");
+      setMessage("Please provide valid email and password")
       console.error(error)
     }
   }
