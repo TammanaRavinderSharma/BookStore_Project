@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { FiSearch } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci";
@@ -21,81 +21,102 @@ const navigation = [
 const Navbar = () => {
 
   const [isdropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const cartItems = useSelector(state => state.cart.cartItems);
   const {currentUser,logout} = useAuth();
+  const navigate = useNavigate();
 
   const handlelogout = async () => {
     logout();
   }
 
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
   return (
     <header className="max-w-screen-2xl mx-auto px-4 py-6 bg-slate-900/70">
-      <nav className='flex justify-between items-center'>
+      <nav className='flex justify-between items-center gap-4'>
 
-        {/* LEFT SECTION */}
-        <div className='flex items-center md:gap-16 gap-4'>
-
-          <Link to="/">
-            <HiBars3CenterLeft className='size-6 text-white'/>
+        {/* LEFT SECTION: LOGO */}
+        <div className='flex-shrink-0'>
+          <Link to="/" className="flex items-center gap-2 group">
+            <HiBars3CenterLeft className='size-6 text-white group-hover:text-sky-400 transition-colors'/>
+            <span className="text-2xl font-black tracking-tighter text-white transition-all duration-300">
+              Lit<span className="text-sky-400">sense</span>
+            </span>
           </Link>
-
-          <div className='relative sm:w-72 w-40 space-x-2'>
-            <FiSearch className='absolute inline-block left-3 inset-y-2 top-1.5 text-gray-600'/>
-            <input
-              type="text"
-              placeholder='  Search here'
-              className='bg-[#EAEAEA] w-full py-1 md:px-8 px-6 rounded-md focus:outline-none'
-            />
-          </div>
-
         </div>
 
-        {/* RIGHT SECTION */}
-        <div className='relative flex items-center md:space-x-3 space-x-2 gap-3'>
+        {/* CENTER SECTION: SEARCH BAR */}
+        <div className='flex-1 max-w-xl mx-4'>
+          <div className='relative w-full'>
+            <FiSearch className='absolute inline-block left-3 inset-y-2 top-1.5 text-gray-400 z-10'/>
+            <input
+              type="text"
+              placeholder='Search books or authors...'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
+              className='bg-[#EAEAEA] w-full py-1.5 md:px-10 px-8 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 transition-all text-sm'
+            />
+          </div>
+        </div>
+
+        {/* RIGHT SECTION: ACTIONS */}
+        <div className='flex-shrink-0 flex items-center md:space-x-3 space-x-2 gap-3'>
 
           {/* 🤖 AI MODE BUTTON */}
-          <Link to="/ai">
+          <Link to="/ai" className='hidden md:block'>
             <button className='bg-sky-400 hover:bg-sky-500 transition-all duration-300
-              text-white font-semibold px-4 py-1.5 rounded-md shadow-md'>
+              text-white font-semibold px-4 py-1.5 rounded-md shadow-md text-sm'>
               🤖 AI Mode
             </button>
           </Link>
 
-          {/* USER PROFILE */}
-          <div>
+          {/* USER PROFILE / LOGIN */}
+          <div className='relative'>
             {
               currentUser ? (
-                <>
-                  <button onClick={()=>setIsDropdownOpen(!isdropdownOpen)}>
+                <div className='flex items-center gap-3'>
+                  <button onClick={()=>setIsDropdownOpen(!isdropdownOpen)} className='flex items-center'>
                     <img
                       src={avatarImg}
                       alt="avatar"
-                      className={`size-7 rounded-full 
-                      ${currentUser ? 'ring-2 ring-blue-100':''}`}
+                      className={`size-8 rounded-full ring-2 ring-sky-400 p-0.5`}
                     />
                   </button>
+                  <span className='hidden lg:block text-white text-xs font-medium'>
+                    {currentUser.email?.split('@')[0]}
+                  </span>
 
                   {
                     isdropdownOpen && (
-                      <div className='absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40'>
-                        <ul className='py-2'>
+                      <div className='absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50 overflow-hidden'>
+                        <div className='px-4 py-2 bg-gray-50 border-b border-gray-100'>
+                          <p className='text-xs text-gray-500 truncate'>{currentUser.email}</p>
+                        </div>
+                        <ul className='py-1'>
                           {
                             navigation.map((item)=>(
                               <li key={item.name}
                                   onClick={()=> setIsDropdownOpen(false)}>
                                 <Link
                                   to={item.href}
-                                  className='block px-4 py-2 text-sm hover:bg-gray-100'>
+                                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-sky-50 hover:text-sky-600 transition-colors'>
                                   {item.name}
                                 </Link>
                               </li>
                             ))
                           }
 
-                          <li>
+                          <li className='border-t border-gray-100'>
                             <button
                               onClick={handlelogout}
-                              className='block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left'>
+                              className='block px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left transition-colors'>
                               Logout
                             </button>
                           </li>
@@ -103,11 +124,12 @@ const Navbar = () => {
                       </div>
                     )
                   }
-                </>
+                </div>
               )
               :
-              <Link to="/login">
-                <FaUserCircle className='size-8 text-blue-400'/>
+              <Link to="/login" className='flex items-center gap-2 bg-sky-500 hover:bg-sky-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg shadow-sky-500/20 transition-all active:scale-95'>
+                <FaUserCircle className='size-5'/>
+                <span>Login</span>
               </Link>
             }
           </div>
@@ -119,13 +141,11 @@ const Navbar = () => {
 
           {/* CART */}
           <Link to="/cart"
-            className='bg-blue-400 p-1 sm:px-6 px-2 flex items-center rounded-sm'>
-            <MdOutlineShoppingCart />
-
-            <span className='text-sm font-semibold sm:ml-1'>
+            className='bg-blue-400 p-1.5 sm:px-6 px-3 flex items-center rounded-full hover:bg-blue-500 transition-colors'>
+            <MdOutlineShoppingCart className='text-white'/>
+            <span className='text-sm font-bold text-white sm:ml-2'>
               {cartItems.length}
             </span>
-
           </Link>
 
         </div>

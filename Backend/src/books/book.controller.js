@@ -1,4 +1,5 @@
 const Book = require('./book.model');
+const NewBook = require('./newBook.model');
 
 const postABook = async(req,res) => {
      try{
@@ -80,11 +81,62 @@ const deleteBook = async (req,res) => {
     }
 }
 
+const getExploreBooks = async (req, res) => {
+    try {
+        const { category, search, page = 1, limit = 20 } = req.query;
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+
+        let query = {};
+
+        if (search && search.trim()) {
+            // Search across both title and author simultaneously
+            query.$or = [
+                { title: { $regex: search.trim(), $options: 'i' } },
+                { author: { $regex: search.trim(), $options: 'i' } }
+            ];
+        } else if (category && category !== 'all') {
+            // Regex search finds 'Fiction' inside 'Fiction, Literature, Classics'
+            query.genre = { $regex: category, $options: 'i' };
+        }
+
+        const [books, totalBooks] = await Promise.all([
+            NewBook.find(query).skip(skip).limit(parseInt(limit)),
+            NewBook.countDocuments(query)
+        ]);
+
+        res.status(200).send({
+            books,
+            totalBooks,
+            totalPages: Math.ceil(totalBooks / parseInt(limit)),
+            currentPage: parseInt(page)
+        });
+
+    } catch (error) {
+        console.error("Error fetching explore books:", error);
+        res.status(500).send({ message: "Failed to fetch explore books" });
+    }
+};
+
+const getExploreBookById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const book = await NewBook.findById(id);
+        if (!book) {
+            return res.status(404).send({ message: "Explore book not found" });
+        }
+        res.status(200).send(book);
+    } catch (error) {
+        console.error("Error fetching explore book by ID:", error);
+        res.status(500).send({ message: "Failed to fetch explore book details" });
+    }
+};
+
 module.exports = {
     postABook,
     getAllBooks,
     getSingleBook,
     UpdateBook,
-    deleteBook
-
+    deleteBook,
+    getExploreBooks,
+    getExploreBookById
 }

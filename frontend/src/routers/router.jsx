@@ -20,6 +20,11 @@ import UpdateBook from "../pages/dashboard/EditBook/UpdateBook.jsx";
 import AIChat from "../pages/ai/AIChat.jsx";
 import CategoryPage from "../pages/books/CategoryPage.jsx";
 import MoodBooks from "../pages/books/MoodBooks.jsx";
+import ExploreSingleBook from "../pages/books/ExploreSingleBook.jsx";
+import SearchPage from "../pages/books/SearchPage.jsx";
+import Services from "../pages/Services.jsx";
+import About from "../pages/About.jsx";
+import Contact from "../pages/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <div>About</div>,
+        element: <About />,
       },
       {
         path: "/Login",
@@ -75,6 +80,22 @@ const router = createBrowserRouter([
         element: <CategoryPage />,
       },
       { path: "/mood/:moodType", element: <MoodBooks /> },
+      {
+        path: "/explore-books/:id",
+        element: <ExploreSingleBook />,
+      },
+      {
+        path: "/search",
+        element: <SearchPage />,
+      },
+      {
+        path: "/services",
+        element: <Services />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
     ],
   },
   {

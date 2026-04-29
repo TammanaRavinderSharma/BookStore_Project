@@ -26,6 +26,26 @@ const booksApi = createApi({
             },
             providesTags: ["Books"]
         }),
+        fetchExploreBooks: builder.query({
+            query: ({ category, search, page = 1, limit = 20 } = {}) => {
+                let url = `/explore?page=${page}&limit=${limit}`;
+                if (search) url += `&search=${encodeURIComponent(search)}`;
+                else if (category) url += `&category=${category}`;
+                return url;
+            },
+            providesTags: ["Books"]
+        }),
+        fetchExploreBookById: builder.query({
+            query: (id) => `/explore/${id}`,
+            providesTags: (result, error, id) => [{ type: "Books", id }],
+        }),
+        summarizeBook: builder.mutation({
+            query: (bookData) => ({
+                url: `${getBaseUrl()}/api/ai/summarize`,
+                method: "POST",
+                body: bookData
+            })
+        }),
         fetchBookById: builder.query({
             query: (id) => `/${id}`,
             providesTags: (result, error, id) => [{ type: "Books", id }],
@@ -59,5 +79,5 @@ const booksApi = createApi({
     })
 })
 
-export const {useFetchAllBooksQuery, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
-export default booksApi;
+export const {useFetchAllBooksQuery, useFetchExploreBooksQuery, useFetchExploreBookByIdQuery, useSummarizeBookMutation, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
+export default booksApi;

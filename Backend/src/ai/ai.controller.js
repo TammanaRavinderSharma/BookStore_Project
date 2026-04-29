@@ -20,4 +20,25 @@ const chatWithAI = async (req, res) => {
   }
 };
 
-module.exports = { chatWithAI };
+const summarizeBook = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+
+    if (!title || !description) {
+      return res.status(400).json({
+        summary: "Book details required for summary",
+      });
+    }
+
+    const prompt = `Summarize the book "${title}" based on this description: ${description}. Provide 3 key bullet points and a one-sentence takeaway.`;
+    const summary = await askGemini(prompt, "en");
+
+    res.json({ summary });
+
+  } catch (error) {
+    console.error("AI Summary Error:", error);
+    res.status(500).json({ summary: "AI failed to summarize 😢" });
+  }
+};
+
+module.exports = { chatWithAI, summarizeBook };

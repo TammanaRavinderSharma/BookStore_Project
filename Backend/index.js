@@ -20,12 +20,14 @@ const orderRoutes = require('./src/orders/order.route');
 const userRoutes = require('./src/users/user.route');
 const adminRoutes = require('./src/stats/admin.stats');
 const aiRoutes = require('./src/ai/ai.route')
+const contactRoutes = require('./src/contacts/contact.route')
 
 app.use('/api/books', bookRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/contacts', contactRoutes);
 
 
 // DB + Server
