@@ -5,7 +5,7 @@ import "swiper/css/pagination";
 import {useEffect , useState} from 'react';
 import { User } from "./User";
 import { Navigation, Pagination } from "swiper/modules";
-
+import { useNavigate } from "react-router-dom";
 const moods = [  
   { label: "happy", gradient: "bg-gradient-to-tr from-white-400 to-blue-400" , image:"/happy.jpeg"},  
   { label: "Calm", gradient: "bg-gradient-to-tr from-white-400 to-cyan-500", image:"/calm.jpeg" },  
@@ -18,6 +18,7 @@ const moods = [
 export default function MoodCircles() { 
     const { ref, inView } = User();
     const [visible , setvisible] = useState(false);
+    const navigate = useNavigate(); 
     useEffect(() => {setvisible(true);},[]); 
   return (  
     <div
@@ -48,6 +49,7 @@ export default function MoodCircles() {
             <div className="flex justify-center">
               <button 
                 className="flex flex-col items-center group focus:outline-none"
+                onClick={() => navigate(`/mood/${mood.label.toLowerCase()}`)}
               >  
                 {/* Gradient Ring */}  
                 <div
