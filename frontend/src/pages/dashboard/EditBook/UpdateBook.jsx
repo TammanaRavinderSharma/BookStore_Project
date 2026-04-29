@@ -91,6 +91,9 @@ const UpdateBook = () => {
             { value: 'fiction', label: 'Fiction' },
             { value: 'horror', label: 'Horror' },
             { value: 'adventure', label: 'Adventure' },
+            { value: 'romance', label: 'Romance' },
+            { value: 'science', label: 'Science' },
+            { value: 'biography', label: 'Biography' },
           ]}
           register={register}
         />

@@ -17,6 +17,8 @@ import ManageBooks from './../pages/dashboard/manageBooks/ManageBook';
 import AddBook from "../pages/dashboard/addBook/AddBook.jsx";
 import  UpdateBook  from "../pages/dashboard/EditBook/UpdateBook.jsx";
 import AIChat from "../pages/ai/AIChat.jsx";
+import CategoryPage from "../pages/books/CategoryPage.jsx";
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -58,6 +60,10 @@ const router = createBrowserRouter([
             {
                 path: "/books/:id",
                 element: <SingleBook/>
+            },
+            {
+                path: "/categories/:name",
+                element: <CategoryPage/>
             }
 
         ]

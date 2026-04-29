@@ -14,10 +14,15 @@ const postABook = async(req,res) => {
 
 const getAllBooks = async (req,res) => {
        try{
-        const books = await Book.find().sort({createdAt:-1}); // Fetch all books from the database, sorted by creation date in descending order
+        const {category} = req.query;
+        let query = {};
+        if(category && category !== "choose a genre") {
+            query.category = category.toLowerCase();
+        }
+        const books = await Book.find(query).sort({createdAt:-1}); // Fetch books from the database, sorted by creation date in descending order
         res.status(200).send(books);
 
-       } catch{
+       } catch(error){
          console.error("Error fetching books", error);
         res.status(500).send({message:"failed to fetch books"});
        }
