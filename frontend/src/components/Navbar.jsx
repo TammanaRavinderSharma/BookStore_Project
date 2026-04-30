@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiBars3CenterLeft } from "react-icons/hi2";
@@ -25,6 +24,19 @@ const Navbar = () => {
   const cartItems = useSelector(state => state.cart.cartItems);
   const {currentUser,logout} = useAuth();
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const handlelogout = async () => {
     logout();
@@ -38,7 +50,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="max-w-screen-2xl mx-auto px-4 py-8 bg-slate-900/70">
+    <header className="max-w-screen-2xl mx-auto px-4 py-8 bg-slate-900/70 relative z-50">
       <nav className='flex justify-between items-center gap-4'>
 
         {/* LEFT SECTION: LOGO */}
@@ -78,7 +90,7 @@ const Navbar = () => {
           </Link>
 
           {/* USER PROFILE / LOGIN */}
-          <div className='relative'>
+          <div className='relative z-50' ref={dropdownRef}>
             {
               currentUser ? (
                 <div className='flex items-center gap-3'>
@@ -95,7 +107,7 @@ const Navbar = () => {
 
                   {
                     isdropdownOpen && (
-                      <div className='absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50 overflow-hidden'>
+                      <div className='absolute right-0 mt-8 top-full w-48 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.5)] rounded-md z-[9999] overflow-hidden'>
                         <div className='px-4 py-2 bg-gray-50 border-b border-gray-100'>
                           <p className='text-xs text-gray-500 truncate'>{currentUser.email}</p>
                         </div>

@@ -45,8 +45,8 @@ const AddBook = () => {
         }
     }
   return (
-    <div className="max-w-lg   mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Add New Book</h2>
+    <div className="max-w-lg mx-auto md:p-8 p-6 bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-2xl shadow-xl animate-fade-in">
+      <h2 className="text-2xl font-bold text-white mb-6">Add New Book</h2>
 
       {/* Form starts here */}
       <form onSubmit={handleSubmit(onSubmit)} className=''>
@@ -87,48 +87,55 @@ const AddBook = () => {
         />
 
         {/* Trending Checkbox */}
-        <div className="mb-4">
-          <label className="inline-flex items-center">
+        <div className="mb-4 bg-slate-900/30 p-3 rounded-lg border border-slate-700/50">
+          <label className="inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
               {...register('trending')}
-              className="rounded text-blue-600 focus:ring focus:ring-offset-2 focus:ring-blue-500"
+              className="w-4 h-4 rounded text-sky-500 bg-slate-800 border-slate-600 focus:ring-sky-500/50 focus:ring-2"
             />
-            <span className="ml-2 text-sm font-semibold text-gray-700">Trending</span>
+            <span className="ml-2 text-sm font-semibold text-slate-300">Mark as Trending</span>
           </label>
         </div>
 
-        {/* Old Price */}
-        <InputField
-          label="Old Price"
-          name="oldPrice"
-          type="number"
-          placeholder="Old Price"
-          register={register}
-         
-        />
-
-        {/* New Price */}
-        <InputField
-          label="New Price"
-          name="newPrice"
-          type="number"
-          placeholder="New Price"
-          register={register}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Old Price */}
+          <InputField
+            label="Old Price"
+            name="oldPrice"
+            type="number"
+            placeholder="0.00"
+            register={register}
           
-        />
+          />
+
+          {/* New Price */}
+          <InputField
+            label="New Price"
+            name="newPrice"
+            type="number"
+            placeholder="0.00"
+            register={register}
+            
+          />
+        </div>
 
         {/* Cover Image Upload */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Cover Image</label>
-          <input type="file" accept="image/*" onChange={handleFileChange} className="mb-2 w-full" />
-          {imageFileName && <p className="text-sm text-gray-500">Selected: {imageFileName}</p>}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-slate-300 mb-2">Cover Image</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleFileChange} 
+            className="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-500/10 file:text-sky-400 hover:file:bg-sky-500/20 cursor-pointer" 
+          />
+          {imageFileName && <p className="text-xs text-slate-500 mt-2">Selected: {imageFileName}</p>}
         </div>
 
         {/* Submit Button */}
-        <button type="submit" className="w-full py-2 bg-purple-600 text-white font-bold rounded-md">
+        <button type="submit" disabled={isLoading} className="w-full py-3 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(56,189,248,0.3)] disabled:opacity-50 disabled:cursor-not-allowed">
          {
-            isLoading ? <span className="">Adding.. </span> : <span>Add Book</span>
+            isLoading ? <span className="">Adding Book... </span> : <span>+ Add Book</span>
           }
         </button>
       </form>

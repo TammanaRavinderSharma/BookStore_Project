@@ -62,8 +62,8 @@ const UpdateBook = () => {
   if (isLoading) return <Loading />
   if (isError) return <div>Error fetching book data</div>
   return (
-    <div className="max-w-lg mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Update Book</h2>
+    <div className="max-w-lg mx-auto md:p-8 p-6 bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-2xl shadow-xl animate-fade-in">
+      <h2 className="text-2xl font-bold text-white mb-6">Update Book</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputField
@@ -97,32 +97,35 @@ const UpdateBook = () => {
           ]}
           register={register}
         />
-        <div className="mb-4">
-          <label className="inline-flex items-center">
+        
+        <div className="mb-4 bg-slate-900/30 p-3 rounded-lg border border-slate-700/50">
+          <label className="inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
               {...register('trending')}
-              className="rounded text-blue-600 focus:ring focus:ring-offset-2 focus:ring-blue-500"
+              className="w-4 h-4 rounded text-sky-500 bg-slate-800 border-slate-600 focus:ring-sky-500/50 focus:ring-2"
             />
-            <span className="ml-2 text-sm font-semibold text-gray-700">Trending</span>
+            <span className="ml-2 text-sm font-semibold text-slate-300">Mark as Trending</span>
           </label>
         </div>
 
-        <InputField
-          label="Old Price"
-          name="oldPrice"
-          type="number"
-          placeholder="Old Price"
-          register={register}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <InputField
+            label="Old Price"
+            name="oldPrice"
+            type="number"
+            placeholder="0.00"
+            register={register}
+          />
 
-        <InputField
-          label="New Price"
-          name="newPrice"
-          type="number"
-          placeholder="New Price"
-          register={register}
-        />
+          <InputField
+            label="New Price"
+            name="newPrice"
+            type="number"
+            placeholder="0.00"
+            register={register}
+          />
+        </div>
 
         <InputField
           label="Cover Image URL"
@@ -132,7 +135,7 @@ const UpdateBook = () => {
           register={register}
         />
 
-        <button type="submit" className="w-full py-2 bg-blue-500 text-white font-bold rounded-md">
+        <button type="submit" className="w-full py-3 mt-4 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(56,189,248,0.3)]">
           Update Book
         </button>
       </form>
