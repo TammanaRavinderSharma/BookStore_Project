@@ -1,6 +1,16 @@
 const Book = require('./book.model');
 const NewBook = require('./newBook.model');
 
+// Mood → genre keyword mapping (derived from real NEWBOOKS genre tags)
+const MOOD_GENRE_MAP = {
+    happy:      ['Humor', 'Comedy', 'Childrens', 'Picture Books', 'Storytime', 'Funny', 'Fun'],
+    calm:       ['Poetry', 'Nature', 'Spirituality', 'Meditation', 'Buddhism', 'Mindfulness', 'Self Help', 'Zen'],
+    thoughtful: ['Philosophy', 'Psychology', 'Biography', 'History', 'Nonfiction', 'Science', 'Essays', 'Memoir'],
+    sad:        ['Drama', 'Literary Fiction', 'Tragedy', 'War', 'Grief', 'Classics', 'Literary'],
+    motivated:  ['Business', 'Self Help', 'Sports', 'Leadership', 'Productivity', 'Entrepreneurship', 'Success'],
+    relaxed:    ['Travel', 'Cooking', 'Food and Drink', 'Art', 'Gardening', 'Nature', 'Crafts', 'Culinary'],
+};
+
 const postABook = async(req,res) => {
      try{
         const newBook = await Book({...req.body});
@@ -131,6 +141,41 @@ const getExploreBookById = async (req, res) => {
     }
 };
 
+const getBooksByMood = async (req, res) => {
+    try {
+        const { moodType } = req.params;
+        const { limit = 12, page = 1 } = req.query;
+        const keywords = MOOD_GENRE_MAP[moodType.toLowerCase()];
+
+        if (!keywords) {
+            return res.status(400).send({ message: 'Unknown mood type' });
+        }
+
+        // Build an $or regex query across the genre string field
+        const query = {
+            $or: keywords.map(kw => ({
+                genre: { $regex: kw, $options: 'i' }
+            }))
+        };
+
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const [books, totalBooks] = await Promise.all([
+            NewBook.find(query).skip(skip).limit(parseInt(limit)).sort({ rating: -1 }),
+            NewBook.countDocuments(query)
+        ]);
+
+        res.status(200).send({
+            books,
+            totalBooks,
+            totalPages: Math.ceil(totalBooks / parseInt(limit)),
+            currentPage: parseInt(page)
+        });
+    } catch (error) {
+        console.error('Error fetching mood books:', error);
+        res.status(500).send({ message: 'Failed to fetch mood books' });
+    }
+};
+
 module.exports = {
     postABook,
     getAllBooks,
@@ -138,5 +183,6 @@ module.exports = {
     UpdateBook,
     deleteBook,
     getExploreBooks,
-    getExploreBookById
+    getExploreBookById,
+    getBooksByMood
 }

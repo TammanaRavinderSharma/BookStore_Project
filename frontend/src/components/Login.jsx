@@ -17,16 +17,22 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm()
-  const onSubmit = async (data) => {
-    try{
-      await loginUser(data.email, data.password);
-      alert("user logged in successfully");
-      navigate("/");
-    }catch(error){
-      setMessage("Please provide valid email and password");
-      console.error(error)
+    const onSubmit = async (data) => {
+      try {
+          await loginUser(data.email, data.password);
+          alert("Login successful!");
+          navigate("/", { replace: true })
+      } catch (error) {
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+              setMessage("Invalid email or password.");
+          } else if (error.code === 'auth/too-many-requests') {
+              setMessage("Too many failed attempts. Please try again later.");
+          } else {
+              setMessage("Login failed. Please provide a valid email and password.");
+          }
+          console.error(error)
+      }
     }
-  }
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();

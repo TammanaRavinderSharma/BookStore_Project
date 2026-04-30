@@ -47,12 +47,20 @@ const CartPage = () => {
                                         {
                                             cartItems.map((product) => (
                                                 <li key={product?._id} className="flex py-6">
-                                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                                        <img
-                                                            alt=""
-                                                            src={`${getImgUrl(product?.coverImage)}`}
-                                                            className="h-full w-full object-cover object-center"
-                                                        />
+                                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-white/10 bg-gray-800">
+                                                        {(product?.img || product?.coverImage) ? (
+                                                            <img
+                                                                alt={product?.title}
+                                                                src={(product?.img || product?.coverImage).startsWith('http') ? (product?.img || product?.coverImage) : getImgUrl(product?.coverImage)}
+                                                                className="h-full w-full object-cover object-center"
+                                                            />
+                                                        ) : (
+                                                            <div className="h-full w-full bg-gradient-to-br from-sky-900 to-indigo-900 flex items-center justify-center">
+                                                                <span className="text-white text-3xl font-black opacity-30 select-none uppercase">
+                                                                    {product?.title?.charAt(0) || '?'}
+                                                                </span>
+                                                            </div>
+                                                        )}
                                                     </div>
 
                                                     <div className="ml-4 flex flex-1 flex-col">

@@ -37,7 +37,11 @@ const ExploreBookCard = ({ book }) => {
                             className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                     ) : (
-                        <div className="text-gray-600 text-4xl flex items-center justify-center h-full">📚</div>
+                        <div className="h-full w-full bg-gradient-to-br from-sky-900 to-indigo-900 flex items-center justify-center">
+                            <span className="text-white text-5xl font-black opacity-25 select-none uppercase">
+                                {book.title?.charAt(0) || '?'}
+                            </span>
+                        </div>
                     )}
                 </Link>
                 {book.rating && (

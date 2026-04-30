@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CategoryStrip from './components/CategoryStrip';
 import Footer from './components/Footer.jsx'
+import BackToTop from './components/BackToTop.jsx';
 import { AuthProvide } from './context/AuthContext.jsx';
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Outlet/>
       </main>
       <Footer/>
+      <BackToTop/>
      </AuthProvide>
     </div>
   )

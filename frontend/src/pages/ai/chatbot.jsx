@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { FiSend, FiMic, FiPlay, FiPause, FiSquare } from "react-icons/fi";
 import { FaRobot, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function ChatBot() {
   const [message, setMessage] = useState("");
@@ -150,17 +151,22 @@ export default function ChatBot() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-300 font-medium">Lang:</label>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="bg-slate-800 text-white text-sm py-1.5 px-3 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-            >
-              <option value="en">English</option>
-              <option value="hi">Hindi</option>
-              <option value="mr">Marathi</option>
-            </select>
+          <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+            <Link to="/" className="text-sm font-medium text-sky-400 hover:text-white border border-sky-400/30 px-3 py-1.5 rounded-lg hover:bg-sky-500/20 transition-all flex items-center gap-1">
+               &larr; Back Home
+            </Link>
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-300 font-medium">Lang:</label>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-slate-800 text-white text-sm py-1.5 px-3 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="mr">Marathi</option>
+              </select>
+            </div>
           </div>
         </div>
 

@@ -13,7 +13,7 @@ import AIChat from '../pages/ai/chatbot';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard'},
-  { name: 'Orders', href: '/order'},
+  { name: 'Orders', href: '/orders'},
   { name: 'Cart Page', href: '/cart'},
   { name: 'Check Out', href: '/checkout'}, 
 ]
@@ -38,7 +38,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="max-w-screen-2xl mx-auto px-4 py-6 bg-slate-900/70">
+    <header className="max-w-screen-2xl mx-auto px-4 py-8 bg-slate-900/70">
       <nav className='flex justify-between items-center gap-4'>
 
         {/* LEFT SECTION: LOGO */}
@@ -136,8 +136,15 @@ const Navbar = () => {
 
           {/* WISHLIST */}
           <button className='hidden sm:block'>
-            <CiHeart className='size-8 text-white'/>
+            <CiHeart className='size-8 text-white hover:text-red-400 transition-colors'/>
           </button>
+
+          {/* YOUR ORDERS (VISIBLE WHEN LOGGED IN) */}
+          {currentUser && (
+            <Link to="/orders" className='hidden sm:flex items-center gap-1 bg-white/5 hover:bg-white/10 text-sky-400 px-3 py-1.5 rounded-md font-medium text-sm border border-sky-400/20 transition-all'>
+              Orders
+            </Link>
+          )}
 
           {/* CART */}
           <Link to="/cart"

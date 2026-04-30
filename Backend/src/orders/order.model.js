@@ -31,6 +31,15 @@ const orderSchema = new mongoose.Schema({
     totalPrice:{
         type: Number,
         required: true,
+    },
+    status: {
+        type: String,
+        enum: ['Pending', 'Processing', 'Shipped', 'Delivered'],
+        default: 'Pending',
+    },
+    trackingId: {
+        type: String,
+        default: () => 'TRK-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
     }
     },{
         timestamps: true,

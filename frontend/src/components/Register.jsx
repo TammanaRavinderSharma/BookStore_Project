@@ -21,7 +21,16 @@ const Register = () => {
         const result = await registerUser(data.email, data.password);
         alert("user registered successfully")
       } catch (error) {
-        setMessage("Please provide valid email and password");
+        // Provide specific Firebase error messages instead of a generic one
+        if (error.code === 'auth/email-already-in-use') {
+          setMessage("Email is already registered. Please login instead.");
+        } else if (error.code === 'auth/weak-password') {
+          setMessage("Password should be at least 6 characters.");
+        } else if (error.code === 'auth/invalid-email') {
+          setMessage("Please provide a valid email address.");
+        } else {
+          setMessage(error.message || "Registration failed. Please try again.");
+        }
         console.error(error)
       }
     }

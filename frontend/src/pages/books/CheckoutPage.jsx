@@ -3,12 +3,15 @@ import { useSelector } from 'react-redux';
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useDispatch } from 'react-redux';
+import { clearCart } from '../../redux/features/cart/cartSlice';
 
 import Swal from'sweetalert2';
 import { useCreateOrderMutation } from '../../redux/features/orders/ordersApi';
 
 const CheckoutPage = () => {
     const cartItems = useSelector(state => state.cart.cartItems);
+    const dispatch = useDispatch();
     const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
     const {currentUser} = useAuth()
     const {
@@ -44,16 +47,17 @@ const CheckoutPage = () => {
             console.log("ORDER SENT:", newOrder);
 
             await createOrder(newOrder).unwrap();
+            dispatch(clearCart());
             Swal.fire({
                 title: "Confirmed Order",
                 text: "Your order placed successfully!",
-                icon: "warning",
-                showCancelButton: true,
+                icon: "success",
+                showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, It's Okay!"
+                confirmButtonText: "View My Orders"
+              }).then(() => {
+                navigate("/orders");
               });
-              navigate("/orders")
         } catch (error) {
             console.error("Error place an order", error);
             alert("Failed to place an order")
