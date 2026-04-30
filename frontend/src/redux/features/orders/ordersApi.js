@@ -22,12 +22,37 @@ const ordersApi = createApi({
       query: (email) => `/email/${email}`,
       providesTags: ['orders'],
     }),
+
+    getAllOrders: builder.query({
+      query: () => ({
+        url: '/',
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      }),
+      providesTags: ['orders'],
+    }),
+
+    updateOrderStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/status/${id}`,
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: { status },
+      }),
+      invalidatesTags: ['orders'],
+    }),
   }),
 });
 
 export const {
   useCreateOrderMutation,
   useGetOrderByEmailQuery,
+  useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
 } = ordersApi;
 
 export default ordersApi;

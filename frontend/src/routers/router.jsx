@@ -26,6 +26,8 @@ import Services from "../pages/Services.jsx";
 import About from "../pages/About.jsx";
 import Contact from "../pages/Contact.jsx";
 
+import ManageOrders from "../pages/dashboard/manageOrders/ManageOrders.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -57,7 +59,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/ai",
-        element: <AIChat />,
+        element: (
+          <PrivateRoute>
+            <AIChat />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/cart",
@@ -139,6 +145,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageBooks />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-orders",
+        element: (
+          <AdminRoute>
+            <ManageOrders />
           </AdminRoute>
         ),
       },

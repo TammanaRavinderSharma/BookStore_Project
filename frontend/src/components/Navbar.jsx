@@ -70,10 +70,10 @@ const Navbar = () => {
         <div className='flex-shrink-0 flex items-center md:space-x-3 space-x-2 gap-3'>
 
           {/* 🤖 AI MODE BUTTON */}
-          <Link to="/ai" className='hidden md:block'>
-            <button className='bg-sky-400 hover:bg-sky-500 transition-all duration-300
-              text-white font-semibold px-4 py-1.5 rounded-md shadow-md text-sm'>
-              🤖 AI Mode
+          <Link to={currentUser ? "/ai" : "/login"} className='hidden md:block'>
+            <button className={`${currentUser ? 'bg-sky-400 hover:bg-sky-500' : 'bg-slate-700 hover:bg-slate-600'} transition-all duration-300
+              text-white font-semibold px-4 py-1.5 rounded-md shadow-md text-sm whitespace-nowrap`}>
+              {currentUser ? '🤖 AI Mode' : '🔒 Login for AI Mode'}
             </button>
           </Link>
 
