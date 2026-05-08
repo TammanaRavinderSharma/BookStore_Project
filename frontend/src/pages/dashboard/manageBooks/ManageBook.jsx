@@ -110,7 +110,7 @@ const ManageBooks = () => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-green-400 font-bold">${book.newPrice}</span>
+                                            <span className="text-green-400 font-bold">₹{(book.newPrice * 83).toFixed(0)}</span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-center gap-3">

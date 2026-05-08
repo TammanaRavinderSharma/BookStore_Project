@@ -45,6 +45,24 @@ const ordersApi = createApi({
       }),
       invalidatesTags: ['orders'],
     }),
+
+    // ── Razorpay Payment Endpoints ──────────────────────────────────────
+    createRazorpayOrder: builder.mutation({
+      query: (body) => ({
+        url: '/create-razorpay-order',
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    verifyPayment: builder.mutation({
+      query: (body) => ({
+        url: '/verify-payment',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['orders'],
+    }),
   }),
 });
 
@@ -53,6 +71,9 @@ export const {
   useGetOrderByEmailQuery,
   useGetAllOrdersQuery,
   useUpdateOrderStatusMutation,
+  useCreateRazorpayOrderMutation,
+  useVerifyPaymentMutation,
 } = ordersApi;
 
 export default ordersApi;
+

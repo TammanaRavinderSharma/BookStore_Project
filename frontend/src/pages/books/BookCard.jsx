@@ -5,12 +5,14 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../redux/features/cart/cartSlice'
 
-const BookCard = ({ book }) => {
+const BookCard = ({ book, isExplore = false }) => {
     const dispatch = useDispatch();
 
     const handleAddToCart = (product) => {
         dispatch(addToCart(product))
     }
+
+    const bookLink = isExplore ? `/explore-books/${book._id}` : `/books/${book._id}`;
 
     return (
         <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden
@@ -30,7 +32,7 @@ const BookCard = ({ book }) => {
 
             {/* Cover Image */}
             <div className="relative h-56 overflow-hidden bg-gray-900 flex items-center justify-center">
-                <Link to={`/books/${book._id}`} className="w-full h-full">
+                <Link to={bookLink} className="w-full h-full">
                     <img
                         src={
                             book?.coverImage?.startsWith('http')
@@ -43,7 +45,7 @@ const BookCard = ({ book }) => {
                 </Link>
                 {/* Hover overlay with quick actions */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-                    <Link to={`/books/${book._id}`}
+                    <Link to={bookLink}
                         className="bg-white/10 backdrop-blur-sm border border-white/20 text-white p-2.5 rounded-full hover:bg-sky-500/80 transition-colors"
                         title="View Details">
                         <FiEye size={16} />
@@ -66,7 +68,7 @@ const BookCard = ({ book }) => {
                     </span>
                 )}
 
-                <Link to={`/books/${book._id}`}>
+                <Link to={bookLink}>
                     <h3 className="text-white font-bold text-sm leading-tight mb-1 line-clamp-2 group-hover:text-sky-300 transition-colors">
                         {book?.title}
                     </h3>
@@ -93,9 +95,9 @@ const BookCard = ({ book }) => {
                 {/* Price & Cart */}
                 <div className="flex items-center justify-between mt-auto">
                     <div>
-                        <span className="text-green-400 font-black text-base">${book?.newPrice}</span>
+                        <span className="text-green-400 font-black text-base">₹{(book?.newPrice * 83).toFixed(0)}</span>
                         {book?.oldPrice && (
-                            <span className="text-gray-600 line-through text-xs ml-1">${book?.oldPrice}</span>
+                            <span className="text-gray-600 line-through text-xs ml-1">₹{(book?.oldPrice * 83).toFixed(0)}</span>
                         )}
                     </div>
                     <button

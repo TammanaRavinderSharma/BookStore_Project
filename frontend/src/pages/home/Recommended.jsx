@@ -104,7 +104,7 @@ const Recommended = () => {
                                     coverImage: book.coverImage || book.img,
                                     // NewBook uses 'desc'; BookCard expects 'description'
                                     description: book.description || book.desc,
-                                }} />
+                                }} isExplore={true} />
                             </SwiperSlide>
                         ))}
                     </Swiper>

@@ -40,7 +40,26 @@ const orderSchema = new mongoose.Schema({
     trackingId: {
         type: String,
         default: () => 'TRK-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-    }
+    },
+    // Payment fields
+    paymentMethod: {
+        type: String,
+        enum: ['COD', 'Online'],
+        default: 'COD',
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['Pending', 'Paid', 'Failed'],
+        default: 'Pending',
+    },
+    razorpayOrderId: {
+        type: String,
+        default: null,
+    },
+    razorpayPaymentId: {
+        type: String,
+        default: null,
+    },
     },{
         timestamps: true,
     })

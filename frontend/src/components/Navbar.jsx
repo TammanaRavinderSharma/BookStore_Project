@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiBars3CenterLeft } from "react-icons/hi2";
-import { FiSearch, FiSun, FiMoon, FiTrash2, FiShoppingCart, FiHeart } from "react-icons/fi";
+import { FiSearch, FiSun, FiMoon, FiTrash2, FiShoppingCart, FiHeart, FiMic, FiMicOff } from "react-icons/fi";
 import { FaUserCircle, FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import avatarImg from "../assets/avatar.png";
@@ -26,6 +26,7 @@ const Navbar = () => {
   const [isdropdownOpen, setIsDropdownOpen] = useState(false);
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isListening, setIsListening] = useState(false);
 
   const cartItems = useSelector(state => state.cart.cartItems);
   const wishlistItems = useSelector(state => state.wishlist.wishlistItems);
@@ -61,6 +62,44 @@ const Navbar = () => {
     }
   };
 
+  const handleVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice search is not supported in this browser. Please use Google Chrome or Microsoft Edge.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const speechToText = event.results[0][0].transcript;
+      setSearchQuery(speechToText);
+      navigate(`/search?q=${encodeURIComponent(speechToText.trim())}`);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Voice recognition error: ", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    if (isListening) {
+      recognition.stop();
+    } else {
+      recognition.start();
+    }
+  };
+
   const handleQuickAddToCart = (book) => {
     dispatch(addToCart(book));
     setIsFavoritesOpen(false);
@@ -90,8 +129,18 @@ const Navbar = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearch}
-              className='bg-[#EAEAEA] w-full py-1.5 md:px-10 px-8 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 transition-all text-sm text-slate-900'
+              className='bg-[#EAEAEA] w-full py-1.5 md:pl-10 md:pr-10 pl-8 pr-10 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 transition-all text-sm text-slate-900 font-medium'
             />
+            {/* Voice Search Microphone Button */}
+            <button
+              type="button"
+              onClick={handleVoiceSearch}
+              className={`absolute right-3.5 top-1.5 p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-all cursor-pointer z-10 flex items-center justify-center
+                ${isListening ? 'text-red-500 animate-pulse scale-110' : 'text-gray-400 hover:text-sky-500'}`}
+              title={isListening ? "Listening... Speak now" : "Search by voice"}
+            >
+              {isListening ? <FiMicOff className="size-4" /> : <FiMic className="size-4" />}
+            </button>
           </div>
         </div>
 
@@ -220,7 +269,7 @@ const Navbar = () => {
                               </Link>
                             </h4>
                             <p className="text-gray-500 text-[10px] truncate">by {book.author}</p>
-                            <span className="text-green-400 font-bold text-xs">${book.newPrice || '10.99'}</span>
+                            <span className="text-green-400 font-bold text-xs">₹{((book.newPrice || 10.99) * 83).toFixed(0)}</span>
                           </div>
                           
                           <div className="flex items-center gap-1.5">

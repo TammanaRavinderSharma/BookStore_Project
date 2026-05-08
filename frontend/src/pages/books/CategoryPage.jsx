@@ -65,8 +65,8 @@ const ExploreBookCard = ({ book }) => {
                 )}
                 {/* Price */}
                 <div className="flex items-center gap-2 mb-3">
-                    <span className="text-green-400 font-bold text-sm">${newPrice}</span>
-                    <span className="text-gray-500 line-through text-xs">${oldPrice}</span>
+                    <span className="text-green-400 font-bold text-sm">₹{(newPrice * 83).toFixed(0)}</span>
+                    <span className="text-gray-500 line-through text-xs">₹{(oldPrice * 83).toFixed(0)}</span>
                     <span className="text-xs text-orange-400 font-medium">
                         {Math.round(((oldPrice - newPrice) / oldPrice) * 100)}% off
                     </span>

@@ -115,8 +115,8 @@ const ExploreSingleBook = () => {
 
                             {/* Price Section */}
                             <div className="flex items-baseline gap-4 mb-6 p-4 rounded-xl bg-white/5 border border-white/10">
-                                <span className="text-4xl font-black text-green-400">${newPrice}</span>
-                                <span className="text-xl text-gray-500 line-through">${oldPrice}</span>
+                                <span className="text-4xl font-black text-green-400">₹{(newPrice * 83).toFixed(0)}</span>
+                                <span className="text-xl text-gray-500 line-through">₹{(oldPrice * 83).toFixed(0)}</span>
                                 <span className="px-2 py-1 bg-orange-400/20 text-orange-400 text-sm font-bold rounded-lg border border-orange-400/30">
                                     {discount}% OFF
                                 </span>

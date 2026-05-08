@@ -72,7 +72,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <p className="text-slate-400 text-sm font-medium mb-1">Total Sales</p>
-                        <h3 className="text-2xl font-bold text-white">${data?.totalSales || 0}</h3>
+                        <h3 className="text-2xl font-bold text-white">₹{data?.totalSales || 0}</h3>
                     </div>
                 </div>
 

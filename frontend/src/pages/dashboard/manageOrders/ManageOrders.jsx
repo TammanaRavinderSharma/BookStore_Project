@@ -117,7 +117,7 @@ const ManageOrders = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col">
-                                                <span className="text-green-400 font-bold">${order.totalPrice.toFixed(2)}</span>
+                                                <span className="text-green-400 font-bold">₹{order.totalPrice.toFixed(2)}</span>
                                                 <span className="text-xs text-slate-500">{order.productIds.length} items</span>
                                             </div>
                                         </td>

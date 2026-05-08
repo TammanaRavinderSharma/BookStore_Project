@@ -1,19 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('./order.model');
-const { createAnOrder,getOrderByEmail, getAllOrders, updateOrderStatus } = require('./order.controller');
+const { createAnOrder, getOrderByEmail, getAllOrders, updateOrderStatus } = require('./order.controller');
+const { createRazorpayOrder, verifyPaymentAndCreateOrder } = require('./payment.controller');
 const verifyAdminToken = require('../middleware/verifyAdminToken');
 
-//create order endpoint
+// ── Razorpay Payment Routes ─────────────────────────────────────────────
+// Step 1: Create a Razorpay order (returns orderId + key)
+router.post('/create-razorpay-order', createRazorpayOrder);
+// Step 2: Verify payment signature + save order to DB
+router.post('/verify-payment', verifyPaymentAndCreateOrder);
+
+// ── Standard Order Routes ───────────────────────────────────────────────
+// Create order endpoint (COD)
 router.post('/', createAnOrder);
 
-// get orders by user email
-router.get("/email/:email",getOrderByEmail);
+// Get orders by user email
+router.get("/email/:email", getOrderByEmail);
 
-// admin: get all orders
+// Admin: get all orders
 router.get('/', verifyAdminToken, getAllOrders);
 
-// admin: update order status
+// Admin: update order status
 router.patch('/status/:id', verifyAdminToken, updateOrderStatus);
 
-module.exports = router;
+module.exports = router;

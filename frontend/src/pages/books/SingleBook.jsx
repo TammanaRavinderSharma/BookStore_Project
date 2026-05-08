@@ -116,7 +116,7 @@ const SingleBook = () => {
 
                             <button onClick={() => handleAddToCart(book)} className="flex-grow flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 px-6 rounded-xl shadow-lg transition-colors">
                                 <FiShoppingCart className="w-5 h-5" />
-                                <span>Add to Cart - ${book.newPrice}</span>
+                                <span>Add to Cart - ₹{(book.newPrice * 83).toFixed(0)}</span>
                             </button>
 
                             <button 

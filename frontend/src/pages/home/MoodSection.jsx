@@ -58,8 +58,8 @@ const MoodBookCard = ({ book }) => {
                 </Link>
                 <p className="text-gray-500 text-xs mb-2 truncate">{book.author}</p>
                 <div className="flex items-center gap-1.5 mb-2 mt-auto">
-                    <span className="text-green-400 font-bold text-xs">${newPrice}</span>
-                    <span className="text-gray-600 line-through text-xs">${oldPrice}</span>
+                    <span className="text-green-400 font-bold text-xs">₹{(newPrice * 83).toFixed(0)}</span>
+                    <span className="text-gray-600 line-through text-xs">₹{(oldPrice * 83).toFixed(0)}</span>
                 </div>
                 <button
                     onClick={() => dispatch(addToCart({ ...book, newPrice, oldPrice }))}

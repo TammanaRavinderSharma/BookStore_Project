@@ -115,7 +115,7 @@ const OrderPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Amount</p>
-                                        <p className="text-green-400 font-bold">${order.totalPrice.toFixed(2)}</p>
+                                        <p className="text-green-400 font-bold">₹{order.totalPrice.toFixed(0)}</p>
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Items</p>
@@ -167,7 +167,7 @@ const OrderPage = () => {
                                             <div className="mt-4 pt-4 border-t border-white/10">
                                                 <div className="flex justify-between items-center text-sm mb-2">
                                                     <span className="text-gray-400">Subtotal ({order.productIds?.length || 0} items)</span>
-                                                    <span className="text-white">${order.totalPrice.toFixed(2)}</span>
+                                                    <span className="text-white">₹{order.totalPrice.toFixed(0)}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center text-sm mb-4">
                                                     <span className="text-gray-400">Shipping</span>
@@ -175,7 +175,7 @@ const OrderPage = () => {
                                                 </div>
                                                 <div className="flex justify-between items-center font-bold text-lg">
                                                     <span className="text-white">Total</span>
-                                                    <span className="text-green-400">${order.totalPrice.toFixed(2)}</span>
+                                                    <span className="text-green-400">₹{order.totalPrice.toFixed(0)}</span>
                                                 </div>
                                             </div>
                                         </div>
