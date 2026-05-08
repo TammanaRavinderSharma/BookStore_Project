@@ -146,7 +146,8 @@ Your application should now be fully operational locally!
 ---
 
 ## 👤 Author
-* **Tamanna** — Main Developer / Final Year Project Lead
+* **Sakshi** — Main Developer / Final Year Project Lead
+* **Tamanna** — Main Developer / Final Year Project Co Lead
 
 ---
 *Developed with ❤️ as a modern, high-grade Academic Capstone Project.*
