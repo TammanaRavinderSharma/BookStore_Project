@@ -32,7 +32,11 @@ const BookCard = ({ book }) => {
             <div className="relative h-56 overflow-hidden bg-gray-900 flex items-center justify-center">
                 <Link to={`/books/${book._id}`} className="w-full h-full">
                     <img
-                        src={`${getImgUrl(book?.coverImage)}`}
+                        src={
+                            book?.coverImage?.startsWith('http')
+                                ? book.coverImage
+                                : `${getImgUrl(book?.coverImage)}`
+                        }
                         alt={book?.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

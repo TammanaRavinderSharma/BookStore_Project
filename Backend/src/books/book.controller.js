@@ -1,5 +1,6 @@
 const Book = require('./book.model');
 const NewBook = require('./newBook.model');
+const Order = require('../orders/order.model');
 
 // Mood → genre keyword mapping (derived from real NEWBOOKS genre tags)
 const MOOD_GENRE_MAP = {
@@ -176,6 +177,96 @@ const getBooksByMood = async (req, res) => {
     }
 };
 
+// Category keyword → genre keyword map for cross-collection matching
+const CATEGORY_GENRE_MAP = {
+    fiction:      ['Fiction', 'Literary Fiction', 'Classics', 'Drama'],
+    nonfiction:   ['Nonfiction', 'Biography', 'History', 'Memoir', 'Essays'],
+    business:     ['Business', 'Leadership', 'Productivity', 'Entrepreneurship', 'Success'],
+    'self-help':  ['Self Help', 'Mindfulness', 'Spirituality', 'Meditation'],
+    mystery:      ['Mystery', 'Thriller', 'Crime', 'Detective'],
+    fantasy:      ['Fantasy', 'Science Fiction', 'Sci-Fi', 'Adventure'],
+    romance:      ['Romance', 'Love'],
+    children:     ['Childrens', 'Picture Books', 'Storytime', 'Funny'],
+    science:      ['Science', 'Philosophy', 'Psychology'],
+    history:      ['History', 'Biography', 'Memoir', 'War'],
+    biography:    ['Biography', 'Memoir', 'Nonfiction'],
+    humor:        ['Humor', 'Comedy', 'Funny'],
+    poetry:       ['Poetry', 'Nature'],
+    travel:       ['Travel', 'Cooking', 'Culinary', 'Art'],
+    cooking:      ['Cooking', 'Food and Drink', 'Culinary'],
+    sports:       ['Sports', 'Leadership', 'Productivity'],
+};
+
+const getRecommendations = async (req, res) => {
+    try {
+        const { email, limit = 18 } = req.query;
+        const intLimit = parseInt(limit);
+
+        // If user is logged in, try to personalise
+        if (email) {
+            // 1. Fetch all orders for this user
+            const orders = await Order.find({ email }).sort({ createdAt: -1 }).limit(10);
+
+            if (orders.length > 0) {
+                // 2. Collect all productIds across orders
+                const productIds = orders.flatMap(o => o.productIds);
+
+                // 3. Fetch those books to get their categories
+                const purchasedBooks = await Book.find({ _id: { $in: productIds } }).select('category');
+
+                if (purchasedBooks.length > 0) {
+                    // 4. Build a unique set of genre keywords from purchased categories
+                    const genreKeywords = new Set();
+                    purchasedBooks.forEach(b => {
+                        const cat = (b.category || '').toLowerCase().trim();
+                        const keywords = CATEGORY_GENRE_MAP[cat];
+                        if (keywords) keywords.forEach(kw => genreKeywords.add(kw));
+                        else {
+                            // Fallback: use the raw category string as a keyword
+                            genreKeywords.add(b.category);
+                        }
+                    });
+
+                    if (genreKeywords.size > 0) {
+                        // 5. Query NEWBOOKS for matching genres, sorted by rating
+                        const genreQuery = {
+                            $or: [...genreKeywords].map(kw => ({
+                                genre: { $regex: kw, $options: 'i' }
+                            }))
+                        };
+
+                        const books = await NewBook.find(genreQuery)
+                            .sort({ rating: -1 })
+                            .limit(intLimit);
+
+                        if (books.length > 0) {
+                            return res.status(200).json({
+                                books,
+                                personalized: true,
+                                genres: [...genreKeywords].slice(0, 5),
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fallback: top-rated books from NEWBOOKS
+        const books = await NewBook.find({ rating: { $exists: true } })
+            .sort({ rating: -1 })
+            .limit(intLimit);
+
+        return res.status(200).json({
+            books,
+            personalized: false,
+        });
+
+    } catch (error) {
+        console.error('Error fetching recommendations:', error);
+        res.status(500).json({ message: 'Failed to fetch recommendations' });
+    }
+};
+
 module.exports = {
     postABook,
     getAllBooks,
@@ -184,5 +275,6 @@ module.exports = {
     deleteBook,
     getExploreBooks,
     getExploreBookById,
-    getBooksByMood
+    getBooksByMood,
+    getRecommendations,
 }

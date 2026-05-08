@@ -3,12 +3,9 @@ import MoodSection from './MoodSection';
 import { FiHeart } from 'react-icons/fi';
 
 const moodConfig = [
-    { moodType: 'happy',      label: 'Happy',      emoji: '😄', accentColor: 'text-yellow-400' },
-    { moodType: 'calm',       label: 'Calm',       emoji: '😌', accentColor: 'text-cyan-400'   },
-    { moodType: 'thoughtful', label: 'Thoughtful', emoji: '🤔', accentColor: 'text-fuchsia-400' },
-    { moodType: 'sad',        label: 'Sad',        emoji: '😔', accentColor: 'text-purple-400' },
-    { moodType: 'motivated',  label: 'Motivated',  emoji: '🔥', accentColor: 'text-red-400'    },
-    { moodType: 'relaxed',    label: 'Relaxed',    emoji: '🌿', accentColor: 'text-emerald-400' },
+    { moodType: 'happy',     label: 'Happy',     emoji: '😄', accentColor: 'text-yellow-400' },
+    { moodType: 'motivated', label: 'Motivated', emoji: '🔥', accentColor: 'text-red-400'    },
+    { moodType: 'relaxed',   label: 'Relaxed',   emoji: '🌿', accentColor: 'text-emerald-400' },
 ];
 
 const MoodShelf = () => {

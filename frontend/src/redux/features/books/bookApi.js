@@ -40,6 +40,13 @@ const booksApi = createApi({
                 `/mood/${moodType}?limit=${limit}&page=${page}`,
             providesTags: ["Books"]
         }),
+        fetchRecommendations: builder.query({
+            query: (email) =>
+                email
+                    ? `/recommendations?email=${encodeURIComponent(email)}`
+                    : `/recommendations`,
+            providesTags: ["Books"]
+        }),
         fetchExploreBookById: builder.query({
             query: (id) => `/explore/${id}`,
             providesTags: (result, error, id) => [{ type: "Books", id }],
@@ -84,5 +91,5 @@ const booksApi = createApi({
     })
 })
 
-export const {useFetchAllBooksQuery, useFetchExploreBooksQuery, useFetchExploreBookByIdQuery, useFetchBooksByMoodQuery, useSummarizeBookMutation, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
+export const {useFetchAllBooksQuery, useFetchExploreBooksQuery, useFetchExploreBookByIdQuery, useFetchBooksByMoodQuery, useFetchRecommendationsQuery, useSummarizeBookMutation, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
 export default booksApi;

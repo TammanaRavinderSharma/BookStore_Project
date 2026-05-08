@@ -11,9 +11,9 @@ const Home = () => {
     <>
       <Banner/>
       <MoodCircles/>
-      <MoodShelf/>
-      <TopSellers/>
       <Recommended/>
+      <TopSellers/>
+      <MoodShelf/>
       <News/>
     </>
   )
