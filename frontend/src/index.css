@@ -1,1 +1,152 @@
 @import "tailwindcss";
+
+/* Global Smooth Transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ==========================================================================
+   PREMIUM LIGHT THEME OVERRIDES
+   ========================================================================== */
+.light-theme {
+  background-color: #f8fafc !important; /* Soft Slate 50 */
+  color: #0f172a !important; /* Slate 900 */
+}
+
+.light-theme .bg-black,
+.light-theme div.bg-black {
+  background-color: #f8fafc !important;
+}
+
+/* Header & Navbar */
+.light-theme header {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(15, 23, 42, 0.02) !important;
+}
+
+.light-theme header span.text-white,
+.light-theme header .text-white,
+.light-theme header svg {
+  color: #0f172a !important;
+}
+
+.light-theme header input {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+
+.light-theme header input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* General Typography */
+.light-theme h1,
+.light-theme h2,
+.light-theme h3,
+.light-theme h4,
+.light-theme h5,
+.light-theme h6,
+.light-theme .text-white {
+  color: #0f172a !important;
+}
+
+.light-theme p,
+.light-theme span.text-gray-500,
+.light-theme .text-gray-500 {
+  color: #475569 !important; /* Slate 600 */
+}
+
+/* Book Cards & Grid Panels */
+.light-theme .bg-white\/5 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04) !important;
+}
+
+.light-theme .bg-white\/5:hover {
+  background-color: #ffffff !important;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08) !important;
+  border-color: #38bdf8 !important;
+}
+
+.light-theme .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+.light-theme .bg-gray-900 {
+  background-color: #f1f5f9 !important;
+}
+
+.light-theme .bg-slate-800\/60 {
+  background-color: #f1f5f9 !important;
+}
+
+/* Swiper Elements */
+.light-theme .swiper-slide {
+  background-color: transparent !important;
+}
+
+.light-theme .swiper-button-next,
+.light-theme .swiper-button-prev {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+/* AI Assistant & Chatbot Window */
+.light-theme .bg-white\/10 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06) !important;
+}
+
+.light-theme .bg-slate-800\/90 {
+  background-color: #f1f5f9 !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+
+.light-theme .bg-slate-900\/60 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+
+.light-theme textarea {
+  color: #0f172a !important;
+}
+
+.light-theme .bg-slate-700 {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+/* Footer Section */
+.light-theme footer {
+  background-color: #ffffff !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+
+.light-theme footer h4 {
+  color: #0f172a !important;
+}
+
+.light-theme footer a,
+.light-theme footer p {
+  color: #475569 !important;
+}
+
+.light-theme footer a:hover {
+  color: #0284c7 !important;
+}
+
+/* General Buttons and Badges */
+.light-theme .bg-white\/5.text-gray-400 {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}

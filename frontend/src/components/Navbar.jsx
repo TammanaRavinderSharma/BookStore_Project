@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiBars3CenterLeft } from "react-icons/hi2";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiSun, FiMoon } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import avatarImg from "../assets/avatar.png";
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import AIChat from '../pages/ai/chatbot';
 
 const navigation = [
@@ -23,6 +24,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const cartItems = useSelector(state => state.cart.cartItems);
   const {currentUser,logout} = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -149,6 +151,19 @@ const Navbar = () => {
           {/* WISHLIST */}
           <button className='hidden sm:block'>
             <CiHeart className='size-8 text-white hover:text-red-400 transition-colors'/>
+          </button>
+
+          {/* THEME TOGGLE BUTTON */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-white/10 dark:hover:bg-white/5 transition-all duration-300 flex items-center justify-center cursor-pointer"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {theme === 'dark' ? (
+              <FiSun className="size-5 text-yellow-400 hover:scale-110 transition-transform duration-300" />
+            ) : (
+              <FiMoon className="size-5 text-slate-700 dark:text-slate-300 hover:scale-110 transition-transform duration-300" />
+            )}
           </button>
 
           {/* YOUR ORDERS (VISIBLE WHEN LOGGED IN) */}
