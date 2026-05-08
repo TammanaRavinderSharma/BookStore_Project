@@ -1,54 +1,69 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiBars3CenterLeft } from "react-icons/hi2";
-import { FiSearch, FiSun, FiMoon } from "react-icons/fi";
-import { CiHeart } from "react-icons/ci";
+import { FiSearch, FiSun, FiMoon, FiTrash2, FiShoppingCart, FiHeart } from "react-icons/fi";
+import { FaUserCircle, FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { FaUserCircle } from "react-icons/fa";
 import avatarImg from "../assets/avatar.png";
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import AIChat from '../pages/ai/chatbot';
+import { removeFromWishlist } from '../redux/features/wishlist/wishlistSlice';
+import { addToCart } from '../redux/features/cart/cartSlice';
+import { getImgUrl } from '../utils/getImgUrl';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard'},
   { name: 'Orders', href: '/orders'},
   { name: 'Cart Page', href: '/cart'},
   { name: 'Check Out', href: '/checkout'}, 
-]
+];
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [isdropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
   const cartItems = useSelector(state => state.cart.cartItems);
-  const {currentUser,logout} = useAuth();
+  const wishlistItems = useSelector(state => state.wishlist.wishlistItems);
+  const { currentUser, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const navigate = useNavigate();
+
   const dropdownRef = useRef(null);
+  const favoritesRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
+      if (favoritesRef.current && !favoritesRef.current.contains(event.target)) {
+        setIsFavoritesOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, [dropdownRef, favoritesRef]);
 
   const handlelogout = async () => {
     logout();
-  }
+  };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
     }
+  };
+
+  const handleQuickAddToCart = (book) => {
+    dispatch(addToCart(book));
+    setIsFavoritesOpen(false);
   };
 
   return (
@@ -75,7 +90,7 @@ const Navbar = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearch}
-              className='bg-[#EAEAEA] w-full py-1.5 md:px-10 px-8 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 transition-all text-sm'
+              className='bg-[#EAEAEA] w-full py-1.5 md:px-10 px-8 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 transition-all text-sm text-slate-900'
             />
           </div>
         </div>
@@ -86,7 +101,7 @@ const Navbar = () => {
           {/* 🤖 AI MODE BUTTON */}
           <Link to={currentUser ? "/ai" : "/login"} className='hidden md:block'>
             <button className={`${currentUser ? 'bg-sky-400 hover:bg-sky-500' : 'bg-slate-700 hover:bg-slate-600'} transition-all duration-300
-              text-white font-semibold px-4 py-1.5 rounded-md shadow-md text-sm whitespace-nowrap`}>
+              text-white font-semibold px-4 py-1.5 rounded-md shadow-md text-sm whitespace-nowrap cursor-pointer`}>
               {currentUser ? '🤖 AI Mode' : '🔒 Login for AI Mode'}
             </button>
           </Link>
@@ -96,7 +111,7 @@ const Navbar = () => {
             {
               currentUser ? (
                 <div className='flex items-center gap-3'>
-                  <button onClick={()=>setIsDropdownOpen(!isdropdownOpen)} className='flex items-center'>
+                  <button onClick={() => setIsDropdownOpen(!isdropdownOpen)} className='flex items-center cursor-pointer'>
                     <img
                       src={avatarImg}
                       alt="avatar"
@@ -117,7 +132,7 @@ const Navbar = () => {
                           {
                             navigation.map((item)=>(
                               <li key={item.name}
-                                  onClick={()=> setIsDropdownOpen(false)}>
+                                  onClick={() => setIsDropdownOpen(false)}>
                                 <Link
                                   to={item.href}
                                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-sky-50 hover:text-sky-600 transition-colors'>
@@ -130,7 +145,7 @@ const Navbar = () => {
                           <li className='border-t border-gray-100'>
                             <button
                               onClick={handlelogout}
-                              className='block px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left transition-colors'>
+                              className='block px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left transition-colors cursor-pointer'>
                               Logout
                             </button>
                           </li>
@@ -148,10 +163,90 @@ const Navbar = () => {
             }
           </div>
 
-          {/* WISHLIST */}
-          <button className='hidden sm:block'>
-            <CiHeart className='size-8 text-white hover:text-red-400 transition-colors'/>
-          </button>
+          {/* WISHLIST BUTTON & DROPDOWN */}
+          <div className='relative' ref={favoritesRef}>
+            <button 
+              onClick={() => setIsFavoritesOpen(!isFavoritesOpen)}
+              className='relative p-2 rounded-full hover:bg-white/10 dark:hover:bg-white/5 transition-all duration-300 flex items-center justify-center cursor-pointer'
+              title="Favorites"
+            >
+              {wishlistItems.length > 0 ? (
+                <FaHeart className='size-6 text-red-500 hover:scale-110 transition-transform duration-300' />
+              ) : (
+                <FiHeart className='size-6 text-white hover:text-red-400 hover:scale-110 transition-transform duration-300' />
+              )}
+              {wishlistItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-pulse">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </button>
+
+            {/* WISHLIST DROPDOWN */}
+            {isFavoritesOpen && (
+              <div className="absolute right-0 mt-4 w-80 bg-slate-900 border border-white/10 shadow-2xl rounded-2xl p-4 z-[9999] overflow-hidden light-favorites-dropdown animate-in fade-in slide-in-from-top-4 duration-200">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+                  <span className="text-white font-bold text-sm flex items-center gap-1.5">
+                    <FaHeart className="text-red-500" /> Favorites ({wishlistItems.length})
+                  </span>
+                  <button 
+                    onClick={() => setIsFavoritesOpen(false)}
+                    className="text-gray-400 hover:text-white text-xs cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+
+                {wishlistItems.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500 text-xs">
+                    <p className="text-2xl mb-1">❤️</p>
+                    <p>Your favorites list is empty.</p>
+                  </div>
+                ) : (
+                  <div className="max-h-64 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
+                    {wishlistItems.map((book) => {
+                      const coverImage = book.coverImage || book.img;
+                      return (
+                        <div key={book._id} className="flex gap-3 items-center border-b border-white/5 pb-2 last:border-none">
+                          <img 
+                            src={coverImage?.startsWith('http') ? coverImage : `${getImgUrl(coverImage)}`}
+                            alt={book.title}
+                            className="w-10 h-14 object-cover rounded-lg flex-shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-white text-xs font-bold truncate hover:text-sky-400">
+                              <Link to={book.img ? `/explore-books/${book._id}` : `/books/${book._id}`} onClick={() => setIsFavoritesOpen(false)}>
+                                {book.title}
+                              </Link>
+                            </h4>
+                            <p className="text-gray-500 text-[10px] truncate">by {book.author}</p>
+                            <span className="text-green-400 font-bold text-xs">${book.newPrice || '10.99'}</span>
+                          </div>
+                          
+                          <div className="flex items-center gap-1.5">
+                            <button 
+                              onClick={() => handleQuickAddToCart(book)}
+                              className="p-1.5 bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                              title="Add to Cart"
+                            >
+                              <FiShoppingCart size={13} />
+                            </button>
+                            <button 
+                              onClick={() => dispatch(removeFromWishlist(book))}
+                              className="p-1.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                              title="Remove"
+                            >
+                              <FiTrash2 size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* THEME TOGGLE BUTTON */}
           <button
@@ -185,7 +280,7 @@ const Navbar = () => {
         </div>
       </nav>
     </header>
-  )
-}
+  );
+};
 
 export default Navbar;

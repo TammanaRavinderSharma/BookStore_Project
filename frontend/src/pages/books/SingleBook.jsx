@@ -4,9 +4,11 @@ import { useParams } from "react-router-dom"
 import axios from 'axios';
 
 import { getImgUrl } from '../../utils/getImgUrl';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useFetchBookByIdQuery } from '../../redux/features/books/bookApi';
+import { toggleWishlist } from '../../redux/features/wishlist/wishlistSlice';
+import { FaHeart } from 'react-icons/fa';
 import getBaseUrl from '../../utils/baseURL';
 import Loading from '../../components/Loading';
 
@@ -17,6 +19,15 @@ const SingleBook = () => {
 
     const [aiSummary, setAiSummary] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+
+    const wishlistItems = useSelector(state => state.wishlist.wishlistItems);
+    const isFavorite = wishlistItems.some(item => item._id === id);
+
+    const handleToggleWishlist = () => {
+        if (book) {
+            dispatch(toggleWishlist(book));
+        }
+    };
 
     const handleAddToCart = (product) => {
         dispatch(addToCart(product))
@@ -91,7 +102,19 @@ const SingleBook = () => {
 
                         {/* Action Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                            <button onClick={() => handleAddToCart(book)} className="flex-1 flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 px-6 rounded-xl shadow-lg transition-colors">
+                            <button 
+                                onClick={handleToggleWishlist} 
+                                className={`px-5 py-3.5 rounded-xl border flex items-center justify-center transition-all duration-300 active:scale-95 cursor-pointer
+                                    ${isFavorite 
+                                        ? 'bg-red-500/20 border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' 
+                                        : 'bg-white/5 border-white/10 text-white hover:text-red-400 hover:border-red-400/40'
+                                    }`}
+                                title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                            >
+                                <FaHeart size={20} className={isFavorite ? 'scale-110' : ''} />
+                            </button>
+
+                            <button onClick={() => handleAddToCart(book)} className="flex-grow flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 px-6 rounded-xl shadow-lg transition-colors">
                                 <FiShoppingCart className="w-5 h-5" />
                                 <span>Add to Cart - ${book.newPrice}</span>
                             </button>

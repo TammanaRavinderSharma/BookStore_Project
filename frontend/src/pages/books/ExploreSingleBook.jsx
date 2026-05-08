@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useFetchExploreBookByIdQuery, useSummarizeBookMutation } from '../../redux/features/books/bookApi';
 import Loading from '../../components/Loading';
 import { FiShoppingCart, FiStar, FiCpu, FiBookOpen, FiInfo } from 'react-icons/fi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/features/cart/cartSlice';
+import { toggleWishlist } from '../../redux/features/wishlist/wishlistSlice';
+import { FaHeart } from 'react-icons/fa';
 
 const ExploreSingleBook = () => {
     const { id } = useParams();
@@ -13,6 +15,15 @@ const ExploreSingleBook = () => {
     const [summarizeBook, { isLoading: isSummarizing }] = useSummarizeBookMutation();
     const [aiSummary, setAiSummary] = useState('');
     const [isBookOpen, setIsBookOpen] = useState(false);
+
+    const wishlistItems = useSelector(state => state.wishlist.wishlistItems);
+    const isFavorite = wishlistItems.some(item => item._id === id);
+
+    const handleToggleWishlist = () => {
+        if (book) {
+            dispatch(toggleWishlist(book));
+        }
+    };
 
     if (isLoading) return <Loading />;
     if (isError) return <div className='text-red-500 py-20 text-center'>Error loading book details...</div>;
@@ -113,8 +124,20 @@ const ExploreSingleBook = () => {
 
                             <div className="flex flex-col sm:flex-row gap-4 mb-8">
                                 <button 
+                                    onClick={handleToggleWishlist} 
+                                    className={`p-4 rounded-xl border flex items-center justify-center transition-all duration-300 active:scale-95 cursor-pointer
+                                        ${isFavorite 
+                                            ? 'bg-red-500/20 border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' 
+                                            : 'bg-white/5 border-white/10 text-white hover:text-red-400 hover:border-red-400/40'
+                                        }`}
+                                    title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                                >
+                                    <FaHeart size={20} className={isFavorite ? 'scale-110' : ''} />
+                                </button>
+
+                                <button 
                                     onClick={handleAddToCart}
-                                    className="flex-1 bg-white text-black hover:bg-gray-200 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95"
+                                    className="flex-grow bg-white text-black hover:bg-gray-200 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95 cursor-pointer"
                                 >
                                     <FiShoppingCart size={20} />
                                     Add to Cart
