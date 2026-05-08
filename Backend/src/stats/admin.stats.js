@@ -45,12 +45,26 @@ router.get("/", async (req, res) => {
             { $sort: { _id: 1 } }  
         ]);
 
+        // 7. Books by Category
+        const booksByCategory = await Book.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { count: -1 } }
+        ]);
+
         // Result summary
-        res.status(200).json({  totalOrders,
+        res.status(200).json({  
+            totalOrders,
             totalSales: totalSales[0]?.totalSales || 0,
             trendingBooks,
             totalBooks,
-            monthlySales, });
+            monthlySales,
+            booksByCategory 
+        });
       
     } catch (error) {
         console.error("Error fetching admin stats:", error);

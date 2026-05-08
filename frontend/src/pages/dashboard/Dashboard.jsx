@@ -5,6 +5,7 @@ import Loading from '../../components/Loading';
 import getBaseUrl from '../../utils/baseURL';
 import { MdIncompleteCircle } from 'react-icons/md'
 import RevenueChart from './RevenueChart';
+import CategoryChart from './CategoryChart';
 import { FiBookOpen, FiDollarSign, FiTrendingUp, FiShoppingBag, FiArrowRight } from 'react-icons/fi';
 
 const Dashboard = () => {
@@ -110,16 +111,9 @@ const Dashboard = () => {
                 <div className="lg:col-span-2 bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-2xl p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-lg font-bold text-white">Revenue Overview</h3>
-                        <select className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg px-3 py-1 outline-none">
-                            <option>This Year</option>
-                            <option>Last Year</option>
-                        </select>
                     </div>
-                    <div className="w-full bg-slate-900/50 rounded-xl border border-slate-700/50 p-2">
-                         {/* Ensure RevenueChart handles dark mode if it's a generic component */}
-                         <div className="opacity-90 grayscale-[0.2]">
-                             <RevenueChart />
-                         </div>
+                    <div className="w-full bg-slate-900/50 rounded-xl border border-slate-700/50 p-4">
+                        <RevenueChart monthlySales={data?.monthlySales} />
                     </div>
                 </div>
 
@@ -157,6 +151,28 @@ const Dashboard = () => {
                             <p className="text-slate-400 text-sm">System operating normally</p>
                         </div>
                     </div>
+                </div>
+
+            </section>
+
+            {/* Secondary Content Grid */}
+            <section className="grid lg:grid-cols-3 gap-6">
+                
+                {/* Category Distribution Chart */}
+                <div className="lg:col-span-1 bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-2xl p-6">
+                    <h3 className="text-lg font-bold text-white mb-6">Inventory by Category</h3>
+                    <div className="w-full bg-slate-900/50 rounded-xl border border-slate-700/50 p-4">
+                        <CategoryChart booksByCategory={data?.booksByCategory} />
+                    </div>
+                </div>
+
+                {/* Additional Info / Placeholder */}
+                <div className="lg:col-span-2 bg-gradient-to-r from-sky-500/10 to-purple-500/10 backdrop-blur-md border border-slate-700 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                    <h3 className="text-2xl font-bold text-white mb-2">Ready to Grow?</h3>
+                    <p className="text-slate-400 max-w-md mb-6">Your data looks great! Use the insights above to stock up on trending categories and plan your next marketing campaign.</p>
+                    <Link to="/dashboard/add-new-book" className="px-6 py-3 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] transition-all flex items-center gap-2">
+                        <FiBookOpen /> Add More Books
+                    </Link>
                 </div>
 
             </section>

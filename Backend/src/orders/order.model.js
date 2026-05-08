@@ -16,9 +16,10 @@ const orderSchema = new mongoose.Schema({
         country: String,
         state : String,
         zipcode: String,
+        street: String,
     },
     phone:{
-        type: Number,
+        type: String,
         required: true,
     },
     productIds:[
